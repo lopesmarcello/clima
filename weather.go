@@ -29,7 +29,7 @@ type Weather struct {
 	}
 }
 
-func (l Location) GetWeather() Weather {
+func (l UserLocation) GetWeather() Weather {
 	latitude, longitude := fmt.Sprintf("%f", l.Latitude), fmt.Sprintf("%f", l.Longitude)
 
 	timezone := url.QueryEscape(l.Timezone)

@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 
@@ -25,14 +27,10 @@ type Response struct {
 	Results []Location `json:"results"`
 }
 
-func GetLocation() Location {
-	loc := "mairipora"
+func GetLocation() UserLocation {
+	loc := strings.Join(os.Args[1:], "+")
 
-	if len(os.Args) > 1 {
-		loc = strings.Join(os.Args[1:], "+")
-	}
-
-	r, err := http.Get("https://geocoding-api.open-meteo.com/v1/search?name=" + loc)
+	r, err := http.Get("https://geocoding-api.open-meteo.com/v1/search?name=" + url.QueryEscape(loc))
 	if err != nil {
 		log.Fatal("Error retrieving location", err)
 	}
@@ -50,10 +48,43 @@ func GetLocation() Location {
 	var unmarshaledResponse Response
 	json.Unmarshal(body, &unmarshaledResponse)
 
-	return unmarshaledResponse.Results[0]
+	location := unmarshaledResponse.Results[0]
+
+	return UserLocation{location.Name, location.Latitude, location.Longitude, location.Timezone}
 }
 
-func (l Location) PrintLoadingMessage() {
-	msg := fmt.Sprint("Fetching data for ", l.Name, "...")
+type UserLocation struct {
+	City      string  `json:"city"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+	Timezone  string
+}
+
+func GetUserLocation() UserLocation {
+	ipapiClient := http.Client{}
+	req, err := http.NewRequest("GET", "https://ipapi.co/json/", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	req.Header.Set("User-Agent", "ipapi.co/#go-v1.")
+	resp, err := ipapiClient.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var userLocation UserLocation
+	json.Unmarshal(body, &userLocation)
+
+	return userLocation
+}
+
+func (l UserLocation) PrintLoadingMessage() {
+	msg := fmt.Sprint("Fetching data for ", l.City, "...")
 	color.Green(msg)
 }

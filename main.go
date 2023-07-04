@@ -1,9 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
-	location := GetLocation()
+	var location UserLocation
+
+	if len(os.Args) > 1 {
+		location = GetLocation()
+	} else {
+		location = GetUserLocation()
+	}
+
 	location.PrintLoadingMessage()
 
 	fmt.Printf("Timezone: America/Sao Paulo\n\n")
