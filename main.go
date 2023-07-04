@@ -6,10 +6,9 @@ func main() {
 	location := GetLocation()
 	location.PrintLoadingMessage()
 
-	fmt.Println("")
+	fmt.Printf("Timezone: America/Sao Paulo\n\n")
 
 	weather := location.GetWeather()
-
 	weather.PrintHourlyWeather()
 	weather.PrintDailyWeather()
 }
