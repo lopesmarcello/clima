@@ -9,6 +9,13 @@ Você pode clonar o repositório e rodar:
 ```
 go build
 ```
+-----------
+
+MAC USERS
+
+Vocês podem se aproveitar do arquivo já compilado na pasta `bin` desse mesmo repositório
+
+-----------
 
 Após isso, mova o arquivo para a pasta `/bin` para ter acesso ao comando no terminal
 
