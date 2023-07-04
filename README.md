@@ -1,5 +1,6 @@
-# CLIma 🇧🇷 
+# CLIma  
 
-Programa para verificar o clima e previsão do tempo de cidades Brasileiras
+Programa em CLI para verificar o clima local ou de qualquer lugar do mundo em poucas teclas.
+
 
 

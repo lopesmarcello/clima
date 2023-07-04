@@ -27,7 +27,7 @@ type Response struct {
 }
 
 func GetLocation() UserLocation {
-	loc := strings.Join(os.Args[1:], "+")
+	loc := strings.Join(os.Args[1:], " ")
 
 	r, err := http.Get("https://geocoding-api.open-meteo.com/v1/search?name=" + url.QueryEscape(loc))
 	if err != nil {
